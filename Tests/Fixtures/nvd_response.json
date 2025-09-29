@@ -1,0 +1,26 @@
+{
+  "vulnerabilities": [
+    {
+      "cve": {
+        "id": "CVE-2023-0001",
+        "descriptions": [
+          { "lang": "en", "value": "Test vulnerability" }
+        ],
+        "metrics": {
+          "cvssMetricV31": [
+            {
+              "cvssData": {
+                "baseScore": 7.5,
+                "baseSeverity": "HIGH",
+                "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+              }
+            }
+          ]
+        },
+        "references": [
+          { "url": "https://example.com", "source": "NVD" }
+        ]
+      }
+    }
+  ]
+}

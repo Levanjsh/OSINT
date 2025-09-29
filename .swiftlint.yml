@@ -1,0 +1,8 @@
+included:
+  - OSINTScout
+  - Tests
+excluded:
+  - OSINTScout/Storage/Cache.swift
+line_length: 140
+identifier_name:
+  min_length: 2
