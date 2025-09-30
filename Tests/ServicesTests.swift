@@ -16,6 +16,23 @@ final class ServicesTests: XCTestCase {
         XCTAssertEqual(response.vulnerabilities.first?.cve.id, "CVE-2023-0001")
     }
 
+    func testCSVExporterEscapesSpecialCharacters() throws {
+        let exporter = CSVExporter()
+        let artifact = Artifact(title: "Quote", value: "Value \"with\" comma,\nand newline")
+        let section = ReportSection(moduleID: "module", title: "Module \"Title\"", summary: "", artifacts: [artifact], links: [], source: "dns")
+        let report = Report(target: "example.com", sections: [section])
+
+        let data = exporter.export(report: report, ethicalMode: false)
+        let csv = try XCTUnwrap(String(data: data, encoding: .utf8))
+
+        let expected = """
+        module,title,artifact_title,artifact_value
+        module,"Module ""Title""",Quote,"Value ""with"" comma,
+        and newline"
+        """
+        XCTAssertEqual(csv, expected)
+    }
+
     private func fixture(named name: String) throws -> Data {
         let url = Bundle(for: type(of: self)).url(forResource: name, withExtension: "json", subdirectory: "Fixtures")
         guard let url else { throw NSError(domain: "Fixture", code: 0) }

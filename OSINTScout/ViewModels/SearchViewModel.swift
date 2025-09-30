@@ -103,7 +103,7 @@ final class SearchViewModel: ObservableObject {
         let context = ModuleContext(http: httpClient, cache: cache, settings: settingsStore.settings, logger: logger)
         var progress = 0.0
         var collected: [ModuleResult] = []
-        let logger = logger
+        let logger = self.logger
         let entityValue = entity.rawValue
         await withTaskGroup(of: ModuleResult?.self) { group in
             for module in modules {

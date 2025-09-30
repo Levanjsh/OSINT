@@ -16,9 +16,10 @@ final class CSVExporter {
     }
 
     private func escape(_ value: String) -> String {
-        if value.contains(",") {
-            return "\"\(value)\""
+        var escaped = value.replacingOccurrences(of: "\"", with: "\"\"")
+        if escaped.contains(where: { $0 == "," || $0 == "\n" || $0 == "\r" }) || escaped.contains("\"") {
+            escaped = "\"\(escaped)\""
         }
-        return value
+        return escaped
     }
 }

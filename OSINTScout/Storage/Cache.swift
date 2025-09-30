@@ -2,6 +2,8 @@ import Foundation
 import OSLog
 import SQLite3
 
+private let sqliteTransient = unsafeBitCast(-1, to: sqlite3_destructor_type.self)
+
 final class Cache {
     private let dbPointer: OpaquePointer?
     private let logger: Logger
@@ -37,9 +39,9 @@ final class Cache {
             var statement: OpaquePointer?
             if sqlite3_prepare_v2(dbPointer, sql, -1, &statement, nil) == SQLITE_OK {
                 key.withCString { pointer in
-                    sqlite3_bind_text(statement, 1, pointer, -1, SQLITE_TRANSIENT)
+                    sqlite3_bind_text(statement, 1, pointer, -1, sqliteTransient)
                 }
-                sqlite3_bind_blob(statement, 2, (value as NSData).bytes, Int32(value.count), SQLITE_TRANSIENT)
+                sqlite3_bind_blob(statement, 2, (value as NSData).bytes, Int32(value.count), sqliteTransient)
                 sqlite3_bind_double(statement, 3, Date().timeIntervalSince1970)
                 if sqlite3_step(statement) != SQLITE_DONE {
                     logger.error("Failed to store cache for key \(key, privacy: .public)")
@@ -57,7 +59,7 @@ final class Cache {
             var result: Data?
             if sqlite3_prepare_v2(dbPointer, sql, -1, &statement, nil) == SQLITE_OK {
                 key.withCString { pointer in
-                    sqlite3_bind_text(statement, 1, pointer, -1, SQLITE_TRANSIENT)
+                    sqlite3_bind_text(statement, 1, pointer, -1, sqliteTransient)
                 }
                 if sqlite3_step(statement) == SQLITE_ROW {
                     let timestamp = sqlite3_column_double(statement, 1)
