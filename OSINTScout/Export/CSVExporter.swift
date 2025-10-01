@@ -6,10 +6,10 @@ final class CSVExporter {
         for section in report.sections {
             let artifacts = ethicalMode ? section.artifacts.filter { !$0.isSensitive } : section.artifacts
             if artifacts.isEmpty {
-                rows.append("\(section.moduleID),\(escape(section.title)),,")
+                rows.append("\(escape(section.moduleID)),\(escape(section.title)),,")
             }
             for artifact in artifacts {
-                rows.append("\(section.moduleID),\(escape(section.title)),\(escape(artifact.title)),\(escape(artifact.value))")
+                rows.append("\(escape(section.moduleID)),\(escape(section.title)),\(escape(artifact.title)),\(escape(artifact.value))")
             }
         }
         return rows.joined(separator: "\n").data(using: .utf8) ?? Data()

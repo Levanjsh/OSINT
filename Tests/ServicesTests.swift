@@ -19,7 +19,7 @@ final class ServicesTests: XCTestCase {
     func testCSVExporterEscapesSpecialCharacters() throws {
         let exporter = CSVExporter()
         let artifact = Artifact(title: "Quote", value: "Value \"with\" comma,\nand newline")
-        let section = ReportSection(moduleID: "module", title: "Module \"Title\"", summary: "", artifacts: [artifact], links: [], source: "dns")
+        let section = ReportSection(moduleID: "module,free", title: "Module \"Title\"", summary: "", artifacts: [artifact], links: [], source: "dns")
         let report = Report(target: "example.com", sections: [section])
 
         let data = exporter.export(report: report, ethicalMode: false)
@@ -27,7 +27,7 @@ final class ServicesTests: XCTestCase {
 
         let expected = """
         module,title,artifact_title,artifact_value
-        module,"Module ""Title""",Quote,"Value ""with"" comma,
+        "module,free","Module ""Title""",Quote,"Value ""with"" comma,
         and newline"
         """
         XCTAssertEqual(csv, expected)
